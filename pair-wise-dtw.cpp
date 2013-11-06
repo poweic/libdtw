@@ -28,8 +28,8 @@ int main (int argc, char* argv[]) {
     .add("--eta", "Specify the coefficient in the smoothing minimum", false, "-2");
 
   cmdParser
-    .addGroup("Example 1: ./pair-wise-dtw --ark=data/example.76.ark --type=eu")
-    .addGroup("Example 2: ./pair-wise-dtw --ark=data/example.76.ark --type=ma --theta=<some-trained-theta>");
+    .addGroup("Example 1: ./pair-wise-dtw --ark=data/example.39.ark --type=eu")
+    .addGroup("Example 2: ./pair-wise-dtw --ark=data/example.39.ark --type=ma --theta=<some-trained-theta>");
   
   if(!cmdParser.isOptionLegal())
     cmdParser.showUsageAndExit();
