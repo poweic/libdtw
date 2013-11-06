@@ -64,6 +64,10 @@ inline float smin(float x, float y, float z, float eta) {
   return addlog(addlog(eta * x, eta * y), eta * z) / eta;
 }
 
+inline float min(float x, float y, float z) {
+  return min(min(x, y), z);
+}
+
 size_t findMaxLength(const unsigned int* offset, int N, int dim) {
   size_t MAX_LENGTH = 0;
   for (int i=0; i<N; ++i) {
@@ -113,7 +117,12 @@ float fast_dtw(float* pdist, size_t rows, size_t cols, size_t dim, float eta, fl
   // interior points
   for (size_t x = 1; x < rows; ++x) {
     for (size_t y = 1; y < cols; ++y) {
-      alpha[x * cols + y] = (float) smin(alpha[(x-1) * cols + y], alpha[x * cols + y-1], alpha[(x-1) * cols + y-1], eta) + pdist[x * cols + y];
+      float s1 = alpha[(x-1) * cols + y],
+	    s2 = alpha[x * cols + y-1],
+	    s3 = alpha[(x-1) * cols + y-1];
+
+      // alpha[x * cols + y] = (float) smin(s1, s2, s3, eta) + pdist[x * cols + y];
+      alpha[x * cols + y] = (float) min(s1, s2, s3) + pdist[x * cols + y];
     }
   }
 
@@ -141,7 +150,8 @@ float fast_dtw(float* pdist, size_t rows, size_t cols, size_t dim, float eta, fl
 	      s2 = beta[p2] + pdist[p2],
 	      s3 = beta[p3] + pdist[p3];
 
-	beta[x * cols + y] = smin(s1, s2, s3, eta);
+	// beta[x * cols + y] = smin(s1, s2, s3, eta);
+	beta[x * cols + y] = min(s1, s2, s3);
       }
     }
   }
